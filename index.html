@@ -2,113 +2,55 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Laundry Digital Pro</title>
+<title>Laundry App</title>
 
 <style>
 body {
-    margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background: #f4f7fb;
+    margin: 0;
 }
 
-/* NAVBAR */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 40px;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+/* CONTAINER */
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 30px;
 }
 
-.logo {
-    font-weight: bold;
-    color: #4facfe;
-}
-
-/* HERO */
-.hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 60px;
-    background: linear-gradient(135deg, #4facfe, #00c6ff);
-    color: white;
-}
-
-.hero-text {
-    max-width: 50%;
-}
-
-.hero h1 {
-    font-size: 40px;
-}
-
-.hero img {
-    width: 250px;
-}
-
-/* SECTION */
-.section {
-    padding: 40px;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-}
-
+/* CARD */
 .card {
     background: white;
     padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    text-align: center;
-}
-
-/* STATS */
-.stats {
-    display: flex;
-    justify-content: space-around;
-    background: #4facfe;
-    color: white;
-    padding: 20px;
-    border-radius: 12px;
-}
-
-/* KASIR */
-.container {
-    max-width: 900px;
-    margin: 40px auto;
-}
-
-.form-card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
+    border-radius: 16px;
     margin-bottom: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-input, select, button {
+/* INPUT */
+input, select {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
 }
 
 button {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
     background: #4facfe;
     color: white;
-    font-weight: bold;
-    border: none;
     cursor: pointer;
 }
 
 button:hover {
-    background: #00c6ff;
+    opacity: 0.9;
 }
 
+/* TABLE */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -124,51 +66,37 @@ td {
     padding: 10px;
     border-bottom: 1px solid #eee;
 }
+
+/* STATUS */
+.status-proses { color: orange; font-weight: bold; }
+.status-selesai { color: green; font-weight: bold; }
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #333;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="logo">LaundryPro</div>
-    <div>Home | Services | Contact</div>
-</div>
-
-<!-- HERO -->
-<div class="hero">
-    <div class="hero-text">
-        <h1>Your Laundry, Our Perfection</h1>
-        <p>Laundry cepat, bersih, dan profesional</p>
-    </div>
-    <img src="https://cdn-icons-png.flaticon.com/512/2920/2920222.png">
-</div>
-
-<!-- SERVICES -->
-<div class="section">
-    <h2>Layanan Kami</h2>
-    <div class="cards">
-        <div class="card">Cuci Kering</div>
-        <div class="card">Cuci Setrika</div>
-        <div class="card">Ekspres</div>
-        <div class="card">Dry Cleaning</div>
-    </div>
-</div>
-
-<!-- STATS -->
-<div class="section">
-    <div class="stats">
-        <div>500+ Pelanggan</div>
-        <div>300+ Order</div>
-        <div>100+ Selesai</div>
-        <div>⭐ 4.9 Rating</div>
-    </div>
-</div>
-
-<!-- KASIR -->
 <div class="container">
 
-    <div class="form-card">
+    <div class="card">
         <h2>Input Transaksi</h2>
 
         <label>Nama</label>
@@ -184,54 +112,118 @@ td {
         <label>Berat (Kg)</label>
         <input type="number" id="berat">
 
-        <button onclick="tambahTransaksi()">Simpan</button>
+        <button onclick="tambah()">Tambah</button>
     </div>
 
-    <div class="form-card">
-        <h2>Riwayat</h2>
-        <table id="tabel">
+    <div class="card">
+        <h2>Transaksi</h2>
+
+        <table>
             <thead>
                 <tr>
                     <th>Nama</th>
                     <th>Layanan</th>
                     <th>Berat</th>
                     <th>Total</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody id="list"></tbody>
         </table>
     </div>
 
 </div>
 
-<script>
-function tambahTransaksi() {
-    const nama = document.getElementById('nama').value;
-    const layanan = document.getElementById('layanan');
-    const harga = layanan.value;
-    const teks = layanan.options[layanan.selectedIndex].text;
-    const berat = document.getElementById('berat').value;
+<div id="toast" class="toast"></div>
 
-    if (nama === "" || berat === "") {
-        alert("Isi dulu!");
+<script>
+let data = JSON.parse(localStorage.getItem("laundry")) || [];
+
+function simpan() {
+    localStorage.setItem("laundry", JSON.stringify(data));
+}
+
+function toast(pesan) {
+    const t = document.getElementById("toast");
+    t.innerText = pesan;
+    t.classList.add("show");
+
+    setTimeout(() => {
+        t.classList.remove("show");
+    }, 2000);
+}
+
+function render() {
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    data.forEach((item, i) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${item.nama}</td>
+            <td>${item.layanan}</td>
+            <td>${item.berat} Kg</td>
+            <td>Rp ${item.total.toLocaleString('id-ID')}</td>
+            <td class="${item.status === 'Proses' ? 'status-proses' : 'status-selesai'}">
+                ${item.status}
+            </td>
+            <td>
+                <button onclick="ubahStatus(${i})">✔</button>
+                <button onclick="hapus(${i})">❌</button>
+            </td>
+        `;
+
+        list.appendChild(row);
+    });
+}
+
+function tambah() {
+    const nama = document.getElementById("nama").value;
+    const layananEl = document.getElementById("layanan");
+    const harga = layananEl.value;
+    const layanan = layananEl.options[layananEl.selectedIndex].text;
+    const berat = document.getElementById("berat").value;
+
+    if (!nama || !berat) {
+        toast("Isi semua data!");
         return;
     }
 
     const total = harga * berat;
 
-    const tabel = document.getElementById('tabel').querySelector('tbody');
-    const row = tabel.insertRow();
+    data.push({
+        nama,
+        layanan,
+        berat,
+        total,
+        status: "Proses"
+    });
 
-    row.innerHTML = `
-        <td>${nama}</td>
-        <td>${teks}</td>
-        <td>${berat} Kg</td>
-        <td>Rp ${total.toLocaleString('id-ID')}</td>
-    `;
+    simpan();
+    render();
+    toast("Transaksi ditambahkan!");
 
-    document.getElementById('nama').value = "";
-    document.getElementById('berat').value = "";
+    document.getElementById("nama").value = "";
+    document.getElementById("berat").value = "";
 }
+
+function ubahStatus(i) {
+    data[i].status = data[i].status === "Proses" ? "Selesai" : "Proses";
+    simpan();
+    render();
+    toast("Status diubah!");
+}
+
+function hapus(i) {
+    data.splice(i, 1);
+    simpan();
+    render();
+    toast("Data dihapus!");
+}
+
+render();
 </script>
 
 </body>
