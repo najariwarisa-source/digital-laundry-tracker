@@ -2,160 +2,264 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Laundry App Pro</title>
+<title>Laundry Pro</title>
 
 <style>
 body {
-    font-family: sans-serif;
-    background: #f4f7fb;
     margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f8ff;
 }
 
-.container {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background: #0d6efd;
+    color: white;
+}
+
+.navbar a {
+    color: white;
+    margin-left: 15px;
+    text-decoration: none;
+}
+
+/* HERO */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 70px;
+    background: linear-gradient(135deg,#0d6efd,#00c6ff);
+    color: white;
+}
+
+.hero img {
+    width: 220px;
+}
+
+/* SECTION */
+.section {
+    padding: 50px;
+}
+
+/* CARDS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap: 20px;
 }
 
 .card {
     background: white;
     padding: 20px;
     border-radius: 12px;
-    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* KASIR */
+.kasir {
+    background: white;
+    margin: 30px;
+    padding: 30px;
+    border-radius: 12px;
 }
 
 input, select, button {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 button {
-    background: #4facfe;
+    background: #0d6efd;
     color: white;
     border: none;
+    cursor: pointer;
 }
 
+button:hover {
+    opacity: 0.9;
+}
+
+/* TABLE */
 table {
     width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
 }
 
 th {
-    background: #4facfe;
+    background: #0d6efd;
     color: white;
+    padding: 10px;
 }
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* STATUS */
+.status-proses { color: orange; font-weight: bold; }
+.status-selesai { color: green; font-weight: bold; }
+
 </style>
-
-<!-- FIREBASE MODERN -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "ISI_API_KEY",
-  authDomain: "ISI_DOMAIN",
-  projectId: "ISI_PROJECT_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// LOGIN
-window.login = async function() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-        alert("Login berhasil!");
-    } catch (e) {
-        alert(e.message);
-    }
-}
-
-// TAMBAH DATA
-window.tambah = async function() {
-    const nama = document.getElementById("nama").value;
-    const layanan = document.getElementById("layanan").value;
-    const berat = document.getElementById("berat").value;
-
-    if (!nama || !berat) {
-        alert("Isi semua!");
-        return;
-    }
-
-    await addDoc(collection(db, "transaksi"), {
-        nama,
-        layanan,
-        berat,
-        total: layanan * berat
-    });
-
-    alert("Data masuk!");
-}
-
-// LOAD DATA
-onSnapshot(collection(db, "transaksi"), (snapshot) => {
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-
-    snapshot.forEach(doc => {
-        const d = doc.data();
-
-        list.innerHTML += `
-            <tr>
-                <td>${d.nama}</td>
-                <td>${d.layanan}</td>
-                <td>${d.berat}</td>
-                <td>Rp ${d.total}</td>
-            </tr>
-        `;
-    });
-});
-</script>
-
 </head>
 
 <body>
 
-<div class="container">
-
-<div class="card">
-<h2>Login</h2>
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
+<!-- NAVBAR -->
+<div class="navbar">
+    <div><b>LaundryPro</b></div>
+    <div>
+        <a href="#">Home</a>
+        <a href="#">Services</a>
+        <a href="#">Kasir</a>
+    </div>
 </div>
 
-<div class="card">
-<h2>Tambah Transaksi</h2>
-<input id="nama" placeholder="Nama">
-<select id="layanan">
-<option value="7000">Cuci Kering</option>
-<option value="10000">Cuci Setrika</option>
-</select>
-<input id="berat" type="number" placeholder="Kg">
-<button onclick="tambah()">Tambah</button>
+<!-- HERO -->
+<div class="hero">
+    <div>
+        <h1>Cleaning with Care Every Time</h1>
+        <p>Laundry cepat, bersih, dan profesional</p>
+        <button onclick="scrollKasir()">Mulai Sekarang</button>
+    </div>
+    <img src="https://cdn-icons-png.flaticon.com/512/2920/2920222.png">
 </div>
 
-<div class="card">
-<h2>Data</h2>
-<table>
-<thead>
-<tr>
-<th>Nama</th>
-<th>Layanan</th>
-<th>Berat</th>
-<th>Total</th>
-</tr>
-</thead>
-<tbody id="list"></tbody>
-</table>
+<!-- SERVICES -->
+<div class="section">
+    <h2>Layanan Kami</h2>
+    <div class="cards">
+        <div class="card">Cuci Kering</div>
+        <div class="card">Cuci Setrika</div>
+        <div class="card">Ekspres</div>
+        <div class="card">Dry Cleaning</div>
+    </div>
 </div>
 
+<!-- KASIR -->
+<div class="kasir" id="kasir">
+    <h2>Kasir Laundry</h2>
+
+    <input type="text" id="nama" placeholder="Nama Pelanggan">
+
+    <select id="layanan">
+        <option value="7000">Cuci Kering</option>
+        <option value="10000">Cuci Setrika</option>
+        <option value="15000">Ekspres</option>
+    </select>
+
+    <input type="number" id="berat" placeholder="Berat (Kg)">
+
+    <button onclick="tambah()">Tambah Transaksi</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Layanan</th>
+                <th>Berat</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="list"></tbody>
+    </table>
 </div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("laundry")) || [];
+
+// scroll ke kasir
+function scrollKasir() {
+    document.getElementById("kasir").scrollIntoView({ behavior: "smooth" });
+}
+
+// simpan
+function simpan() {
+    localStorage.setItem("laundry", JSON.stringify(data));
+}
+
+// render
+function render() {
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    data.forEach((d, i) => {
+        list.innerHTML += `
+        <tr>
+            <td>${d.nama}</td>
+            <td>${d.layanan}</td>
+            <td>${d.berat} Kg</td>
+            <td>Rp ${d.total.toLocaleString('id-ID')}</td>
+            <td class="${d.status=='Proses'?'status-proses':'status-selesai'}">${d.status}</td>
+            <td>
+                <button onclick="status(${i})">✔</button>
+                <button onclick="hapus(${i})">❌</button>
+            </td>
+        </tr>`;
+    });
+}
+
+// tambah
+function tambah() {
+    const nama = document.getElementById("nama").value;
+    const layananEl = document.getElementById("layanan");
+    const harga = layananEl.value;
+    const layanan = layananEl.options[layananEl.selectedIndex].text;
+    const berat = document.getElementById("berat").value;
+
+    if (!nama || !berat) {
+        alert("Isi semua data!");
+        return;
+    }
+
+    const total = harga * berat;
+
+    data.push({
+        nama,
+        layanan,
+        berat,
+        total,
+        status: "Proses"
+    });
+
+    simpan();
+    render();
+
+    document.getElementById("nama").value = "";
+    document.getElementById("berat").value = "";
+}
+
+// ubah status
+function status(i) {
+    data[i].status = data[i].status === "Proses" ? "Selesai" : "Proses";
+    simpan();
+    render();
+}
+
+// hapus
+function hapus(i) {
+    data.splice(i, 1);
+    simpan();
+    render();
+}
+
+// load awal
+render();
+</script>
 
 </body>
 </html>
