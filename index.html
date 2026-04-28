@@ -2,13 +2,13 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Laundry App Pro</title>
+<title>Laundry Pro App</title>
 
 <style>
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: #f5f8ff;
+    background: #f4f7fb;
 }
 
 /* NAVBAR */
@@ -34,52 +34,60 @@ body {
 .page {
     display: none;
     padding: 40px;
-    animation: fade 0.5s ease;
 }
 
 .active {
     display: block;
+    animation: fade 0.5s ease;
 }
 
 /* HERO */
 .hero {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     background: linear-gradient(135deg,#0d6efd,#00c6ff);
     color: white;
-    padding: 50px;
-    border-radius: 12px;
+    padding: 40px;
+    border-radius: 16px;
+}
+
+.hero-text {
+    max-width: 50%;
 }
 
 .hero img {
-    width: 200px;
+    width: 320px;
     animation: float 3s infinite ease-in-out;
 }
 
-/* FORM */
+/* CARD */
 .card {
     background: white;
-    padding: 20px;
-    border-radius: 12px;
-    margin-top: 20px;
+    padding: 25px;
+    border-radius: 16px;
+    margin-top: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-input, select, button {
+/* FORM */
+input, select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
 }
 
-button {
-    background: #0d6efd;
-    color: white;
+button.action {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 10px;
     border: none;
+    background: linear-gradient(135deg,#0d6efd,#00c6ff);
+    color: white;
+    font-weight: bold;
     cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.9;
 }
 
 /* TABLE */
@@ -92,26 +100,30 @@ table {
 th {
     background: #0d6efd;
     color: white;
-    padding: 10px;
+    padding: 12px;
 }
 
 td {
-    padding: 10px;
+    padding: 12px;
     border-bottom: 1px solid #eee;
 }
 
-.status-proses { color: orange; }
-.status-selesai { color: green; }
+tr:hover {
+    background: #f9fbff;
+}
+
+.status-proses { color: orange; font-weight: bold; }
+.status-selesai { color: green; font-weight: bold; }
 
 /* ANIMATION */
 @keyframes fade {
-    from { opacity: 0; transform: translateY(20px);}
-    to { opacity: 1; transform: translateY(0);}
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
 }
 
 @keyframes float {
-    0%,100% { transform: translateY(0);}
-    50% { transform: translateY(-10px);}
+    0%,100% {transform: translateY(0);}
+    50% {transform: translateY(-10px);}
 }
 </style>
 </head>
@@ -127,15 +139,17 @@ td {
     </div>
 </div>
 
-<!-- PAGE 1 -->
+<!-- PAGE INPUT -->
 <div id="home" class="page active">
 
     <div class="hero">
-        <div>
-            <h1>Laundry Cepat & Bersih</h1>
-            <p>Kelola laundry dengan mudah</p>
+        <div class="hero-text">
+            <h1>Laundry Cepat & Profesional</h1>
+            <p>Kelola laundry dengan mudah dan cepat</p>
         </div>
-        <img src="https://cdn-icons-png.flaticon.com/512/2920/2920222.png">
+
+        <!-- GAMBAR KAMU -->
+        <img src="file_000000000294720bad8a8535437dce85.png">
     </div>
 
     <div class="card">
@@ -151,12 +165,12 @@ td {
 
         <input id="berat" type="number" placeholder="Berat (Kg)">
 
-        <button onclick="tambah()">Tambah</button>
+        <button class="action" onclick="tambah()">Tambah Transaksi</button>
     </div>
 
 </div>
 
-<!-- PAGE 2 -->
+<!-- PAGE HISTORY -->
 <div id="history" class="page">
 
     <div class="card">
@@ -183,9 +197,9 @@ td {
 let data = JSON.parse(localStorage.getItem("laundry")) || [];
 
 /* SWITCH PAGE */
-function showPage(page) {
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    document.getElementById(page).classList.add("active");
+function showPage(p) {
+    document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
+    document.getElementById(p).classList.add("active");
 }
 
 /* SAVE */
