@@ -1,167 +1,582 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator HPP & BEP Pro - Kewirausahaan</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --secondary: #10b981;
-            --danger: #ef4444;
-            --bg: #f8fafc;
-        }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); padding: 20px; color: #1e293b; }
-        .container { max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h1 { text-align: center; color: var(--primary); margin-bottom: 30px; }
-        .card { border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
-        .card h3 { margin-top: 0; color: #334155; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
-        label { display: block; margin: 10px 0 5px; font-weight: 600; }
-        input { width: 100%; padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; transition: 0.3s; }
-        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
-        
-        /* Gaya Baris Bahan Baku */
-        .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
-        .input-group input:first-child { flex: 2; }
-        .input-group input:last-child { flex: 1; }
-        
-        .btn-add { background: #f1f5f9; color: var(--primary); border: 2px dashed var(--primary); cursor: pointer; padding: 10px; border-radius: 8px; width: 100%; font-weight: bold; margin-bottom: 15px; }
-        .btn-add:hover { background: #eff6ff; }
-        .btn-calculate { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-calculate:hover { background: #1d4ed8; transform: translateY(-2px); }
-        
-        .result-box { margin-top: 30px; display: none; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .grid-results { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .stat-card { background: #f1f5f9; padding: 15px; border-radius: 10px; text-align: center; }
-        .stat-card span { display: block; font-size: 0.8em; color: #64748b; }
-        .stat-card strong { font-size: 1.2em; color: var(--primary); }
-        .alert { background: #fef2f2; color: var(--danger); padding: 15px; border-radius: 8px; border-left: 5px solid var(--danger); margin-top: 15px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator HPP & BEP Bisnis</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --primary: #0C447C;
+      --primary-light: #185FA5;
+      --primary-bg: #E6F1FB;
+      --success: #3B6D11;
+      --success-bg: #EAF3DE;
+      --danger: #791F1F;
+      --danger-bg: #FCEBEB;
+      --danger-border: #E24B4A;
+      --warning-bg: #FAEEDA;
+      --warning: #854F0B;
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: rgba(0,0,0,0.12);
+      --border-strong: rgba(0,0,0,0.2);
+      --text: #1A202C;
+      --text-muted: #64748B;
+      --text-hint: #94A3B8;
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 16px 64px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius);
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--primary-bg); font-size: 22px; }
+    .header-text h1 { font-size: 20px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .header-text p { font-size: 13px; color: var(--text-muted); }
+
+    /* STEP GUIDE */
+    .steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .step-pill i { font-size: 14px; color: var(--primary-light); }
+    .step-pill b { color: var(--text); font-weight: 500; }
+
+    /* SECTION CARD */
+    .card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .step-badge {
+      min-width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary-bg);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    input[type=number], input[type=text] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(24,95,165,0.12);
+    }
+
+    .info-tip {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      padding: 7px 10px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .info-tip i { font-size: 14px; color: var(--text-hint); flex-shrink: 0; margin-top: 1px; }
+
+    /* BAHAN ROWS */
+    .bahan-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .bahan-row input:first-child { flex: 2; }
+    .bahan-row input:nth-child(2) { flex: 1; }
+    .btn-hapus {
+      width: 34px;
+      height: 34px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .btn-hapus:hover { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
+    .btn-hapus i { font-size: 15px; }
+
+    .btn-add {
+      width: 100%;
+      padding: 9px;
+      border: 0.5px dashed var(--primary-light);
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--primary-light);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+      transition: background 0.15s;
+    }
+    .btn-add:hover { background: var(--primary-bg); }
+    .btn-add i { font-size: 15px; }
+
+    .hpp-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      font-size: 13px;
+    }
+    .hpp-total span { color: var(--text-muted); }
+    .hpp-total strong { color: var(--primary); font-weight: 600; }
+
+    /* MARKUP HINT */
+    .markup-hint {
+      display: none;
+      margin-top: 8px;
+      font-size: 12px;
+      padding: 8px 11px;
+      border-radius: var(--radius);
+      border-left: 2px solid;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      line-height: 1.5;
+    }
+    .markup-hint.ok { background: var(--success-bg); border-left-color: #639922; color: var(--success); }
+    .markup-hint.bad { background: var(--danger-bg); border-left-color: var(--danger-border); color: var(--danger); }
+    .markup-hint i { margin-right: 4px; }
+
+    /* CALCULATE BUTTON */
+    .btn-calc {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: var(--primary-bg);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-calc:hover { background: var(--primary-light); }
+    .btn-calc:active { transform: scale(0.99); }
+    .btn-calc i { font-size: 18px; }
+
+    /* RESULTS */
+    .results { display: none; margin-top: 28px; }
+    .divider { border: none; border-top: 0.5px solid var(--border); margin-bottom: 20px; }
+    .results-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .results-title i { font-size: 18px; color: var(--primary-light); }
+
+    .alert-danger {
+      display: none;
+      padding: 12px 14px;
+      background: var(--danger-bg);
+      border-left: 3px solid var(--danger-border);
+      border-radius: var(--radius);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      font-size: 13px;
+      color: var(--danger);
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .metric {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 14px;
+      text-align: center;
+    }
+    .metric .mlabel { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .metric .mvalue { font-size: 20px; font-weight: 600; color: var(--primary); margin-bottom: 3px; }
+    .metric .msub { font-size: 11px; color: var(--text-hint); }
+
+    /* INSIGHT */
+    .insight-card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+    .insight-card h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .insight-card h4 i { font-size: 16px; color: var(--primary-light); }
+    .insight-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: flex-start;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .insight-item i { color: var(--primary-light); font-size: 15px; flex-shrink: 0; margin-top: 2px; }
+    .insight-item strong { color: var(--text); }
+
+    .rekomendasi {
+      margin-top: 12px;
+      padding: 12px 14px;
+      background: var(--success-bg);
+      border-radius: var(--radius);
+      font-size: 13px;
+      color: var(--success);
+      line-height: 1.6;
+    }
+    .rekomendasi strong { color: #27500A; }
+
+    @media (max-width: 480px) {
+      .steps { display: none; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Smart Biz Calc 🚀</h1>
+<div class="wrap">
 
-    <!-- BIAYA TETAP -->
-    <div class="card">
-        <h3>1. Biaya Tetap (Sewa, Gaji, dll)</h3>
-        <label>Total Operasional / Bulan</label>
-        <input type="number" id="fixedCost" placeholder="Contoh: 3000000">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo"><i class="ti ti-chart-bar"></i></div>
+    <div class="header-text">
+      <h1>Kalkulator HPP & BEP Bisnis</h1>
+      <p>Analisis keuangan untuk menghitung <strong>Harga Pokok Produksi (HPP)</strong>, <strong>Break-Even Point (BEP)</strong>, dan rekomendasi strategi harga optimal untuk usaha Anda.</p>
     </div>
+  </div>
 
-    <!-- BIAYA VARIABEL / BAHAN BAKU -->
-    <div class="card">
-        <h3>2. Bahan Baku (HPP per Unit)</h3>
-        <div id="variableList">
-            <div class="input-group">
-                <input type="text" placeholder="Nama Bahan (ex: Kopi)" class="item-name">
-                <input type="number" placeholder="Harga" class="item-price" oninput="updateTotalHPP()">
-            </div>
-        </div>
-        <button class="btn-add" onclick="addItem()">+ Tambah Komponen Bahan</button>
-        <p style="text-align: right;">Total HPP: <strong id="totalHppDisplay">Rp 0</strong></p>
+  <!-- PANDUAN LANGKAH -->
+  <div class="steps">
+    <div class="step-pill"><i class="ti ti-circle-1"></i><span><b>Langkah 1</b> — Biaya tetap</span></div>
+    <div class="step-pill"><i class="ti ti-circle-2"></i><span><b>Langkah 2</b> — Bahan baku</span></div>
+    <div class="step-pill"><i class="ti ti-circle-3"></i><span><b>Langkah 3</b> — Harga jual</span></div>
+    <div class="step-pill"><i class="ti ti-circle-4"></i><span><b>Langkah 4</b> — Lihat hasil</span></div>
+  </div>
+
+  <!-- BIAYA TETAP -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge">1</div>
+      <div>
+        <div class="card-title">Biaya Tetap Operasional</div>
+        <div class="card-desc">Biaya yang tetap dikeluarkan setiap bulan, terlepas dari berapa banyak produk yang dibuat — seperti sewa tempat, gaji karyawan tetap, listrik, dan internet.</div>
+      </div>
     </div>
+    <label for="fixedCost">Total biaya tetap per bulan (Rp)</label>
+    <input type="number" id="fixedCost" placeholder="Contoh: 3000000" oninput="updateLive()">
+    <div class="info-tip"><i class="ti ti-info-circle"></i> Jumlahkan semua pengeluaran rutin bulanan yang harus dibayar meski tidak berproduksi sama sekali.</div>
+  </div>
 
-    <!-- STRATEGI HARGA -->
-    <div class="card">
-        <h3>3. Strategi Harga</h3>
-        <label>Harga Jual per Unit</label>
-        <input type="number" id="sellingPrice" placeholder="Contoh: 20000" oninput="updateTotalHPP()">
+  <!-- BAHAN BAKU / HPP -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge">2</div>
+      <div>
+        <div class="card-title">Komponen Bahan Baku (HPP per Unit)</div>
+        <div class="card-desc">Rincian seluruh biaya variabel untuk memproduksi satu unit produk. Semakin detail, semakin akurat HPP Anda. Tambahkan semua bahan, kemasan, dan biaya produksi langsung.</div>
+      </div>
     </div>
-
-    <button class="btn-calculate" onclick="calculateAll()">Klik untuk Hitung Hasil</button>
-
-    <!-- HASIL -->
-    <div id="resultArea" class="result-box">
-        <div class="grid-results">
-            <div class="stat-card">
-                <span>Margin per Unit</span>
-                <strong id="resMargin">Rp 0</strong>
-            </div>
-            <div class="stat-card">
-                <span>BEP (Titik Impas)</span>
-                <strong id="resBEP">0 Unit</strong>
-            </div>
-        </div>
-        
-        <div id="alertBox" class="alert" style="display:none;"></div>
-        
-        <div class="card" style="background: #ecfdf5; border-color: #10b981; margin-top: 15px;">
-            <h3>Insight Strategis:</h3>
-            <p id="resInsight"></p>
-        </div>
+    <div id="variableList">
+      <div class="bahan-row">
+        <input type="text" placeholder="Nama komponen (misal: Kopi)">
+        <input type="number" placeholder="Biaya (Rp)" class="item-price" oninput="updateLive()">
+        <button class="btn-hapus" onclick="hapusBahan(this)" title="Hapus baris"><i class="ti ti-trash"></i></button>
+      </div>
     </div>
+    <button class="btn-add" onclick="addItem()"><i class="ti ti-plus"></i> Tambah komponen bahan</button>
+    <div class="hpp-total">
+      <span>Total HPP per unit:</span>
+      <strong id="totalHppDisplay">Rp 0</strong>
+    </div>
+  </div>
+
+  <!-- HARGA JUAL -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge">3</div>
+      <div>
+        <div class="card-title">Penetapan Harga Jual</div>
+        <div class="card-desc">Harga jual harus lebih tinggi dari HPP. Idealnya margin kotor minimal 30–50% agar bisnis dapat menutupi biaya tetap dan menghasilkan keuntungan bersih.</div>
+      </div>
+    </div>
+    <label for="sellingPrice">Harga jual per unit (Rp)</label>
+    <input type="number" id="sellingPrice" placeholder="Contoh: 25000" oninput="updateLive()">
+    <div class="markup-hint" id="markupHint"></div>
+    <div class="info-tip"><i class="ti ti-info-circle"></i> Bandingkan harga Anda dengan kompetitor. Harga tertinggi yang pasar mau bayar adalah batas atas ideal Anda.</div>
+  </div>
+
+  <!-- TOMBOL HITUNG -->
+  <button class="btn-calc" onclick="calculateAll()">
+    <i class="ti ti-calculator"></i>
+    Hitung Analisis Bisnis
+  </button>
+
+  <!-- HASIL -->
+  <div id="resultArea" class="results">
+    <hr class="divider">
+    <div class="results-title">
+      <i class="ti ti-report-analytics"></i>
+      Hasil Analisis Keuangan
+    </div>
+    <div id="alertBox" class="alert-danger"></div>
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="mlabel">HPP per Unit</div>
+        <div class="mvalue" id="resHPP">—</div>
+        <div class="msub">Biaya produksi</div>
+      </div>
+      <div class="metric">
+        <div class="mlabel">Margin per Unit</div>
+        <div class="mvalue" id="resMargin">—</div>
+        <div class="msub" id="resMarginPct">—</div>
+      </div>
+      <div class="metric">
+        <div class="mlabel">BEP (Titik Impas)</div>
+        <div class="mvalue" id="resBEP">—</div>
+        <div class="msub">unit / bulan</div>
+      </div>
+      <div class="metric">
+        <div class="mlabel">Target Harian</div>
+        <div class="mvalue" id="resHarian">—</div>
+        <div class="msub">unit / hari (25 hari kerja)</div>
+      </div>
+    </div>
+    <div class="insight-card">
+      <h4><i class="ti ti-bulb"></i> Insight & Rekomendasi Strategis</h4>
+      <div id="insightItems"></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
-    // Fitur Tambah Baris Bahan Baku
-    function addItem() {
-        const container = document.getElementById('variableList');
-        const div = document.createElement('div');
-        div.className = 'input-group';
-        div.innerHTML = `
-            <input type="text" placeholder="Nama Bahan" class="item-name">
-            <input type="number" placeholder="Harga" class="item-price" oninput="updateTotalHPP()">
-        `;
-        container.appendChild(div);
+  function fmt(n) {
+    return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+  }
+
+  function addItem() {
+    const c = document.getElementById('variableList');
+    const d = document.createElement('div');
+    d.className = 'bahan-row';
+    d.innerHTML = `
+      <input type="text" placeholder="Nama komponen">
+      <input type="number" placeholder="Biaya (Rp)" class="item-price" oninput="updateLive()">
+      <button class="btn-hapus" onclick="hapusBahan(this)" title="Hapus baris"><i class="ti ti-trash"></i></button>
+    `;
+    c.appendChild(d);
+  }
+
+  function hapusBahan(btn) {
+    const rows = document.querySelectorAll('.bahan-row');
+    if (rows.length > 1) {
+      btn.closest('.bahan-row').remove();
+      updateLive();
+    }
+  }
+
+  function updateLive() {
+    let total = 0;
+    document.querySelectorAll('.item-price').forEach(p => {
+      total += parseFloat(p.value) || 0;
+    });
+    document.getElementById('totalHppDisplay').textContent = fmt(total);
+
+    const price = parseFloat(document.getElementById('sellingPrice').value) || 0;
+    const hint = document.getElementById('markupHint');
+
+    if (price > 0 && total > 0) {
+      const margin = price - total;
+      const pct = ((margin / price) * 100).toFixed(1);
+      hint.style.display = 'block';
+      if (margin < 0) {
+        hint.className = 'markup-hint bad';
+        hint.innerHTML = '<i class="ti ti-alert-triangle"></i> Harga jual lebih rendah dari HPP — Anda akan merugi setiap penjualan.';
+      } else {
+        hint.className = 'markup-hint ok';
+        const note = pct < 20 ? 'Terlalu tipis, pertimbangkan naikkan harga atau efisienkan HPP.'
+                    : pct < 40 ? 'Cukup sehat, pastikan volume penjualan mencukupi BEP.'
+                    : 'Sangat baik, Anda punya ruang untuk promosi dan diskon.';
+        hint.innerHTML = '<i class="ti ti-circle-check"></i> Margin kotor: <strong>' + pct + '%</strong> — ' + note;
+      }
+    } else {
+      hint.style.display = 'none';
+    }
+    return total;
+  }
+
+  function calculateAll() {
+    const fc = parseFloat(document.getElementById('fixedCost').value) || 0;
+    const vc = updateLive();
+    const price = parseFloat(document.getElementById('sellingPrice').value) || 0;
+
+    if (!fc || !price) {
+      alert('Mohon lengkapi biaya tetap dan harga jual terlebih dahulu.');
+      return;
     }
 
-    // Hitung Total HPP secara Real-time
-    function updateTotalHPP() {
-        let total = 0;
-        const prices = document.getElementsByClassName('item-price');
-        for (let p of prices) {
-            total += Number(p.value) || 0;
-        }
-        document.getElementById('totalHppDisplay').innerText = "Rp " + total.toLocaleString('id-ID');
-        return total;
+    const margin = price - vc;
+    const resultArea = document.getElementById('resultArea');
+    const alertBox = document.getElementById('alertBox');
+
+    resultArea.style.display = 'block';
+    alertBox.style.display = 'none';
+    document.getElementById('resHPP').textContent = fmt(vc);
+
+    if (margin <= 0) {
+      alertBox.style.display = 'block';
+      alertBox.innerHTML = '<strong>Peringatan Kritis:</strong> Harga jual lebih rendah dari HPP. Setiap unit yang terjual menghasilkan kerugian sebesar ' + fmt(Math.abs(margin)) + '. Naikkan harga jual atau efisienkan biaya produksi segera.';
+      document.getElementById('resMargin').textContent = 'RUGI';
+      document.getElementById('resMarginPct').textContent = '—';
+      document.getElementById('resBEP').textContent = '∞';
+      document.getElementById('resHarian').textContent = '∞';
+      document.getElementById('insightItems').innerHTML = '<div class="insight-item"><i class="ti ti-alert-circle"></i><span>Bisnis tidak layak secara finansial dengan kondisi harga saat ini. Tinjau ulang struktur biaya dan strategi harga sebelum melanjutkan operasional.</span></div>';
+      resultArea.scrollIntoView({ behavior: 'smooth' });
+      return;
     }
 
-    // Fungsi Utama Klik Tombol Hitung
-    function calculateAll() {
-        const fc = parseFloat(document.getElementById('fixedCost').value) || 0;
-        const vc = updateTotalHPP();
-        const price = parseFloat(document.getElementById('sellingPrice').value) || 0;
-        
-        const resultArea = document.getElementById('resultArea');
-        const alertBox = document.getElementById('alertBox');
-        
-        if (price === 0 || fc === 0) {
-            alert("Mohon lengkapi data biaya tetap dan harga jual!");
-            return;
-        }
+    const bep = Math.ceil(fc / margin);
+    const harian = Math.ceil(bep / 25);
+    const marginPct = ((margin / price) * 100).toFixed(1);
+    const omzetBEP = bep * price;
 
-        const margin = price - vc;
-        const bep = Math.ceil(fc / margin);
-        const marginPercent = ((margin / price) * 100).toFixed(1);
+    document.getElementById('resMargin').textContent = fmt(margin);
+    document.getElementById('resMarginPct').textContent = marginPct + '% dari harga jual';
+    document.getElementById('resBEP').textContent = bep.toLocaleString('id-ID');
+    document.getElementById('resHarian').textContent = harian.toLocaleString('id-ID');
 
-        // Reset & Tampilkan Tampilan
-        resultArea.style.display = 'block';
-        alertBox.style.display = 'none';
+    let insights = '';
+    insights += `<div class="insight-item"><i class="ti ti-trending-up"></i><span>Untuk menutupi biaya tetap bulanan sebesar <strong>${fmt(fc)}</strong>, Anda wajib menjual minimal <strong>${bep.toLocaleString('id-ID')} unit/bulan</strong> atau setara omzet <strong>${fmt(omzetBEP)}</strong>.</span></div>`;
+    insights += `<div class="insight-item"><i class="ti ti-calendar"></i><span>Dengan 25 hari kerja per bulan, target penjualan harian Anda adalah <strong>${harian} unit/hari</strong>. Melampaui angka ini berarti Anda mulai membukukan keuntungan.</span></div>`;
 
-        if (margin <= 0) {
-            alertBox.style.display = 'block';
-            alertBox.innerText = "Bahaya! Harga jual kamu lebih rendah dari modal bahan baku. Kamu akan rugi setiap kali menjual barang.";
-            document.getElementById('resMargin').innerText = "RUGI";
-            document.getElementById('resBEP').innerText = "Tak Terhingga";
-        } else {
-            document.getElementById('resMargin').innerText = "Rp " + margin.toLocaleString('id-ID');
-            document.getElementById('resBEP').innerText = bep.toLocaleString('id-ID') + " Unit";
-            
-            document.getElementById('resInsight').innerHTML = `
-                Kamu mengambil <strong>keuntungan kotor sebesar ${marginPercent}%</strong> per produk.<br><br>
-                Artinya, untuk menutupi biaya operasional bulananmu (Rp ${fc.toLocaleString('id-ID')}), 
-                kamu wajib menjual minimal <strong>${bep} unit</strong> setiap bulan. 
-                Jika kamu jualan 25 hari dalam sebulan, target harianmu adalah <strong>${Math.ceil(bep/25)} unit/hari</strong>.
-            `;
-        }
-        
-        // Scroll otomatis ke hasil
-        resultArea.scrollIntoView({ behavior: 'smooth' });
+    if (marginPct < 25) {
+      insights += `<div class="insight-item"><i class="ti ti-alert-triangle"></i><span>Margin <strong>${marginPct}%</strong> tergolong tipis. Pertimbangkan menaikkan harga jual, menegosiasikan harga bahan baku, atau mencari supplier alternatif.</span></div>`;
+      insights += `<div class="rekomendasi"><strong>Rekomendasi: Efisiensi Biaya</strong><br>Lakukan audit biaya bahan baku dan pertimbangkan pembelian dalam jumlah lebih besar (bulk) untuk mendapat harga lebih murah. Evaluasi apakah semua biaya tetap benar-benar diperlukan saat ini.</div>`;
+    } else if (marginPct < 45) {
+      insights += `<div class="insight-item"><i class="ti ti-check"></i><span>Margin <strong>${marginPct}%</strong> cukup sehat. Fokus pada peningkatan volume penjualan dan konsistensi kualitas produk.</span></div>`;
+      insights += `<div class="rekomendasi"><strong>Rekomendasi: Tingkatkan Volume</strong><br>Fokus pada pemasaran digital, program loyalitas pelanggan, dan konsistensi produk. Pastikan operasional berjalan efisien agar tidak ada pemborosan yang memotong margin.</div>`;
+    } else {
+      insights += `<div class="insight-item"><i class="ti ti-award"></i><span>Margin <strong>${marginPct}%</strong> sangat baik. Anda memiliki ruang untuk strategi diskon, promosi, atau bundling tanpa mengorbankan profitabilitas.</span></div>`;
+      insights += `<div class="rekomendasi"><strong>Rekomendasi: Ekspansi & Skala</strong><br>Bisnis Anda berada di posisi yang kuat. Pertimbangkan membuka cabang, menambah lini produk, atau melatih lebih banyak tenaga produksi untuk pertumbuhan skala lebih besar.</div>`;
     }
+
+    document.getElementById('insightItems').innerHTML = insights;
+    resultArea.scrollIntoView({ behavior: 'smooth' });
+  }
 </script>
 
 </body>
