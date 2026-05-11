@@ -1,70 +1,923 @@
-<header class="hero-header">
-  <nav class="top-nav">
-    <div class="brand">
-      <div class="brand-icon">🫧</div>
-      <div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Laundry Mami Cuciin</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:       #1A6BFF;
+    --blue-dark:  #0D4FCC;
+    --blue-light: #EEF4FF;
+    --blue-mid:   #3B82F6;
+    --yellow:     #FACC15;
+    --yellow-bg:  #FFFBEB;
+    --white:      #FFFFFF;
+    --gray-50:    #F8FAFC;
+    --gray-100:   #F1F5F9;
+    --gray-200:   #E2E8F0;
+    --gray-400:   #94A3B8;
+    --gray-600:   #475569;
+    --gray-800:   #1E293B;
+    --success:    #10B981;
+    --warning:    #F59E0B;
+    --radius:     14px;
+    --radius-sm:  8px;
+    --shadow-sm:  0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+    --shadow:     0 4px 16px rgba(26,107,255,.10);
+    --shadow-lg:  0 8px 32px rgba(26,107,255,.16);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    min-height: 100vh;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--blue-dark);
+    color: rgba(255,255,255,.80);
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    padding: 7px 24px;
+  }
+  .topbar span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── NAVBAR ── */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: var(--blue);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .logo-text h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--gray-800);
+    line-height: 1.1;
+  }
+  .logo-text span {
+    font-size: 10px;
+    color: var(--blue);
+    font-weight: 600;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  .nav-date {
+    background: var(--blue-light);
+    border-radius: 10px;
+    padding: 8px 16px;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .nav-date .day { font-size: 22px; font-weight: 800; color: var(--blue); font-family: 'Plus Jakarta Sans', sans-serif; }
+  .nav-date .full { font-size: 11px; color: var(--gray-600); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 60%, var(--blue-mid) 100%);
+    padding: 48px 24px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='28' fill='none' stroke='rgba(255,255,255,.05)' stroke-width='1'/%3E%3C/svg%3E") repeat;
+    background-size: 60px 60px;
+  }
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+  }
+  .hero-left h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero-left h2 em { color: var(--yellow); font-style: normal; }
+  .hero-left p { color: rgba(255,255,255,.75); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+  .hero-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero-badge {
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* ── STAT CARDS in hero ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .stat-card {
+    background: rgba(255,255,255,.12);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: var(--radius);
+    padding: 18px;
+    text-align: center;
+  }
+  .stat-card .stat-val {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--white);
+  }
+  .stat-card .stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,.65);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .stat-card.highlight { background: var(--yellow); border-color: var(--yellow); }
+  .stat-card.highlight .stat-val { color: var(--gray-800); }
+  .stat-card.highlight .stat-label { color: var(--gray-600); }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* ── FORM CARD ── */
+  .form-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: sticky;
+    top: 80px;
+  }
+  .form-header {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .form-header .fh-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,.2);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .form-header h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .form-header p { font-size: 11px; color: rgba(255,255,255,.7); }
+  .form-body { padding: 20px; }
+
+  .field-group { margin-bottom: 14px; }
+  .field-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-600);
+    margin-bottom: 5px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+  }
+  .field-group input, .field-group textarea {
+    width: 100%;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--gray-800);
+    transition: border-color .2s, box-shadow .2s;
+    background: var(--gray-50);
+    outline: none;
+  }
+  .field-group input:focus, .field-group textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(26,107,255,.1);
+    background: var(--white);
+  }
+  .field-group textarea { resize: none; height: 70px; }
+
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* PAKET BUTTONS */
+  .paket-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-600);
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .paket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .paket-btn {
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    background: var(--gray-50);
+    padding: 10px 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+  }
+  .paket-btn .pb-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .paket-btn .pb-name { font-size: 12px; font-weight: 700; color: var(--gray-800); display: block; }
+  .paket-btn .pb-price { font-size: 11px; color: var(--gray-400); display: block; }
+  .paket-btn:hover { border-color: var(--blue); background: var(--blue-light); }
+  .paket-btn.active {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    box-shadow: 0 0 0 3px rgba(26,107,255,.1);
+  }
+  .paket-btn.active .pb-name { color: var(--blue); }
+  .paket-btn.active .pb-price { color: var(--blue-dark); }
+
+  /* TOTAL PREVIEW */
+  .total-preview {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .total-preview .tp-label { font-size: 12px; color: rgba(255,255,255,.75); font-weight: 500; }
+  .total-preview .tp-val { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 800; color: var(--white); }
+
+  .btn-tambah {
+    width: 100%;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 13px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s, transform .1s, box-shadow .2s;
+    box-shadow: 0 4px 14px rgba(26,107,255,.35);
+  }
+  .btn-tambah:hover { background: var(--blue-dark); box-shadow: 0 6px 20px rgba(26,107,255,.45); }
+  .btn-tambah:active { transform: scale(.98); }
+
+  /* ── RIGHT PANEL ── */
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .panel-head h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gray-800);
+  }
+
+  /* SEARCH */
+  .search-wrap { position: relative; flex: 1; max-width: 300px; }
+  .search-wrap input {
+    width: 100%;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 20px;
+    padding: 9px 16px 9px 38px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    background: var(--white);
+    transition: border-color .2s;
+  }
+  .search-wrap input:focus { border-color: var(--blue); }
+  .search-wrap .s-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 14px; pointer-events: none;
+  }
+
+  /* FILTER TABS */
+  .filter-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .filter-tab {
+    border: 1.5px solid var(--gray-200);
+    background: var(--white);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    color: var(--gray-600);
+  }
+  .filter-tab:hover { border-color: var(--blue); color: var(--blue); }
+  .filter-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+  /* ORDER CARDS */
+  .orders-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .order-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1.5px solid var(--gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    transition: box-shadow .2s, border-color .2s, transform .15s;
+  }
+  .order-card:hover { box-shadow: var(--shadow); border-color: var(--gray-300); transform: translateY(-1px); }
+  .order-card.status-proses  { border-left: 4px solid var(--blue); }
+  .order-card.status-selesai { border-left: 4px solid var(--success); }
+  .order-card.status-diambil { border-left: 4px solid var(--gray-400); opacity: .85; }
+
+  .order-num {
+    display: inline-block;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 6px;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: .5px;
+  }
+  .order-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 7px;
+  }
+  .order-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .meta-pill {
+    background: var(--gray-100);
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-600);
+  }
+  .meta-pill.paket { background: var(--blue-light); color: var(--blue); font-weight: 600; }
+  .order-date { font-size: 12px; color: var(--gray-400); line-height: 1.6; }
+  .order-notes {
+    background: var(--yellow-bg);
+    border-left: 3px solid var(--yellow);
+    border-radius: 0 6px 6px 0;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--gray-600);
+    font-style: italic;
+    margin-top: 8px;
+  }
+
+  .order-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+  .order-price {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gray-800);
+  }
+
+  .status-badge {
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .2s, transform .1s;
+    white-space: nowrap;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .status-badge:hover { opacity: .8; transform: scale(.96); }
+  .status-badge.proses  { background: rgba(26,107,255,.1);  color: var(--blue); }
+  .status-badge.selesai { background: rgba(16,185,129,.1);  color: var(--success); }
+  .status-badge.diambil { background: var(--gray-100);       color: var(--gray-400); }
+
+  .delete-btn {
+    background: none;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    width: 32px; height: 32px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+    color: var(--gray-400);
+  }
+  .delete-btn:hover { background: #FEE2E2; border-color: #FCA5A5; color: #EF4444; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 56px 24px;
+    color: var(--gray-400);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; color: var(--gray-600); }
+  .empty-state p { font-size: 13px; margin-top: 4px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--gray-800);
+    color: var(--white);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    z-index: 9999;
+    animation: slideUp .3s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* SERVICE STRIP */
+  .service-strip {
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .svc-item { display: flex; align-items: center; gap: 8px; }
+  .svc-item .svc-icon {
+    width: 36px; height: 36px;
+    background: var(--blue-light);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .svc-item .svc-text strong { display: block; font-size: 13px; font-weight: 700; color: var(--gray-800); font-family: 'Plus Jakarta Sans', sans-serif; }
+  .svc-item .svc-text span  { font-size: 11px; color: var(--gray-400); }
+
+  /* FOOTER */
+  footer {
+    background: var(--blue-dark);
+    color: rgba(255,255,255,.6);
+    text-align: center;
+    padding: 18px 24px;
+    font-size: 12px;
+  }
+  footer strong { color: var(--white); }
+
+  /* RESPONSIVE */
+  @media (max-width: 800px) {
+    .main { grid-template-columns: 1fr; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: repeat(4,1fr); }
+    .hero-left h2 { font-size: 26px; }
+    .form-card { position: static; }
+    .topbar { display: none; }
+  }
+  @media (max-width: 500px) {
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .service-strip { gap: 16px; }
+    .main { padding: 20px 16px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>🕐 Buka Setiap Hari 07.00–21.00</span>
+  <span>📍 Layanan Antar Jemput Tersedia</span>
+  <span>📞 Hubungi Kami Sekarang</span>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">🫧</div>
+      <div class="logo-text">
         <h1>Laundry Mami Cuciin</h1>
-        <p>Laundry modern cepat & bersih</p>
+        <span>Bersih • Wangi • Terpercaya</span>
       </div>
+    </a>
+    <div class="nav-date">
+      <div class="day" id="dayNum">—</div>
+      <div class="full" id="dateFull">—</div>
     </div>
+  </div>
+</nav>
 
-    <div class="nav-links">
-      <a href="#">Home</a>
-      <a href="#">Services</a>
-      <a href="#">Orders</a>
-      <a href="#">Contact</a>
-    </div>
-  </nav>
-
-  <div class="hero-content">
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
     <div class="hero-left">
-      <span class="hero-badge">✨ Laundry Premium</span>
-
-      <h2>
-        Your Laundry,<br>
-        <span>Our Spin Perfection</span>
-      </h2>
-
-      <p>
-        Laundry Mami Cuciin siap membantu cucian harian
-        dengan pelayanan cepat, wangi, dan terpercaya.
-      </p>
-
-      <div class="hero-buttons">
-        <button class="hero-btn primary">
-          Book Laundry
-        </button>
-
-        <button class="hero-btn secondary">
-          Lihat Order
-        </button>
-      </div>
-
-      <div class="hero-stats">
-        <div>
-          <strong>547+</strong>
-          <span>Order</span>
-        </div>
-
-        <div>
-          <strong>324+</strong>
-          <span>Pelanggan</span>
-        </div>
-
-        <div>
-          <strong>4.9★</strong>
-          <span>Rating</span>
-        </div>
+      <h2>Pakaian Bersih,<br/><em>Hati Senang!</em></h2>
+      <p>Percayakan cucian Anda kepada Laundry Mami Cuciin. Bersih sempurna, wangi tahan lama, harga terjangkau. Terima kasih sudah mempercayai kami!</p>
+      <div class="hero-badges">
+        <span class="hero-badge">✨ Cuci Kering Rp 7.000/kg</span>
+        <span class="hero-badge">🌸 Cuci Setrika Rp 9.000/kg</span>
+        <span class="hero-badge">👕 Setrika Rp 5.000/kg</span>
+        <span class="hero-badge">🚐 Antar Jemput</span>
       </div>
     </div>
-
-    <div class="hero-right">
-      <div class="machine-card">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/869/869636.png"
-          alt="Laundry"
-        >
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="statTotal">0</div>
+        <div class="stat-label">Total Order</div>
+      </div>
+      <div class="stat-card highlight">
+        <div class="stat-val" id="statProses">0</div>
+        <div class="stat-label">Sedang Proses</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="statSelesai">0</div>
+        <div class="stat-label">Selesai</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="statPendapatan">0K</div>
+        <div class="stat-label">Pendapatan</div>
       </div>
     </div>
   </div>
-</header>
+</section>
+
+<!-- SERVICE STRIP -->
+<div class="service-strip">
+  <div class="svc-item">
+    <div class="svc-icon">🧺</div>
+    <div class="svc-text"><strong>Cuci Kering</strong><span>Rp 7.000/kg</span></div>
+  </div>
+  <div class="svc-item">
+    <div class="svc-icon">🌸</div>
+    <div class="svc-text"><strong>Cuci Setrika</strong><span>Rp 9.000/kg</span></div>
+  </div>
+  <div class="svc-item">
+    <div class="svc-icon">🔥</div>
+    <div class="svc-text"><strong>Setrika Saja</strong><span>Rp 5.000/kg</span></div>
+  </div>
+  <div class="svc-item">
+    <div class="svc-icon">✨</div>
+    <div class="svc-text"><strong>Express 6 Jam</strong><span>+Rp 5.000/kg</span></div>
+  </div>
+  <div class="svc-item">
+    <div class="svc-icon">🚐</div>
+    <div class="svc-text"><strong>Antar Jemput</strong><span>Gratis Area Lokal</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- FORM -->
+  <div class="form-card">
+    <div class="form-header">
+      <div class="fh-icon">📋</div>
+      <div>
+        <h3>Tambah Order Baru</h3>
+        <p>Isi data pelanggan di bawah ini</p>
+      </div>
+    </div>
+    <div class="form-body">
+
+      <div class="field-group">
+        <label>Nama Pelanggan *</label>
+        <input id="fNama" type="text" placeholder="Masukkan nama lengkap..."/>
+      </div>
+
+      <div class="field-group">
+        <label>Nomor HP</label>
+        <input id="fHp" type="tel" placeholder="08xxxxxxxxxx"/>
+      </div>
+
+      <div class="paket-label">Pilih Paket *</div>
+      <div class="paket-grid">
+        <button class="paket-btn active" data-paket="Cuci Kering" data-harga="7000" onclick="pilihPaket(this)">
+          <span class="pb-icon">🧺</span>
+          <span class="pb-name">Cuci Kering</span>
+          <span class="pb-price">Rp 7.000/kg</span>
+        </button>
+        <button class="paket-btn" data-paket="Cuci Setrika" data-harga="9000" onclick="pilihPaket(this)">
+          <span class="pb-icon">🌸</span>
+          <span class="pb-name">Cuci Setrika</span>
+          <span class="pb-price">Rp 9.000/kg</span>
+        </button>
+        <button class="paket-btn" data-paket="Setrika Saja" data-harga="5000" onclick="pilihPaket(this)">
+          <span class="pb-icon">🔥</span>
+          <span class="pb-name">Setrika Saja</span>
+          <span class="pb-price">Rp 5.000/kg</span>
+        </button>
+        <button class="paket-btn" data-paket="Express" data-harga="12000" onclick="pilihPaket(this)">
+          <span class="pb-icon">⚡</span>
+          <span class="pb-name">Express</span>
+          <span class="pb-price">Rp 12.000/kg</span>
+        </button>
+      </div>
+
+      <div class="field-group">
+        <label>Berat (kg) *</label>
+        <input id="fBerat" type="number" min="0.1" step="0.1" placeholder="Contoh: 3.5"/>
+      </div>
+
+      <div class="row-2">
+        <div class="field-group">
+          <label>Tgl Masuk</label>
+          <input id="fTanggalMasuk" type="date"/>
+        </div>
+        <div class="field-group">
+          <label>Est. Selesai</label>
+          <input id="fTanggalSelesai" type="date"/>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Catatan</label>
+        <textarea id="fCatatan" placeholder="Permintaan khusus, warna pakaian, dll..."></textarea>
+      </div>
+
+      <div class="total-preview">
+        <span class="tp-label">Total Pembayaran</span>
+        <span class="tp-val" id="totalPreview">Rp 0</span>
+      </div>
+
+      <button class="btn-tambah" onclick="tambahOrder()">
+        ＋ Tambah Order
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ORDER LIST -->
+  <div>
+    <div class="panel-head">
+      <h3>📦 Daftar Order</h3>
+      <div class="search-wrap">
+        <span class="s-icon">🔍</span>
+        <input id="searchInput" type="text" placeholder="Cari nama, ID, paket..." oninput="renderOrders()"/>
+      </div>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="setFilter('semua',this)">🌐 Semua</button>
+      <button class="filter-tab" onclick="setFilter('proses',this)">🔄 Proses</button>
+      <button class="filter-tab" onclick="setFilter('selesai',this)">✅ Selesai</button>
+      <button class="filter-tab" onclick="setFilter('diambil',this)">📦 Diambil</button>
+    </div>
+
+    <div class="orders-list" id="ordersList">
+      <div class="empty-state">
+        <div class="icon">🫧</div>
+        <h3>Belum ada order</h3>
+        <p>Tambahkan order pertama menggunakan form di samping</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Laundry Mami Cuciin</strong> &mdash; Bersih, Wangi, Terpercaya &nbsp;|&nbsp; Buka Setiap Hari 07.00–21.00
+</footer>
+
+<script>
+let orders = JSON.parse(localStorage.getItem('laundry_orders') || '[]');
+let filterStatus = 'semua';
+
+let selectedPaket = {
+  paket: 'Cuci Kering',
+  harga: 7000
+};
+
+function getCustomerHistory(nama) {
+  const history = orders.filter(o => o.nama.toLowerCase() === nama.toLowerCase());
+  return {
+    totalOrder: history.length,
+    totalBelanja: history.reduce((s, o) => s + o.total, 0)
+  };
+}
+
+function init() {
+  const now = new Date();
+  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  document.getElementById('dayNum').textContent = now.getDate();
+  document.getElementById('dateFull').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+  const today = now.toISOString().split('T')[0];
+  const d2 = new Date(now);
+  d2.setDate(d2.getDate() + 2);
+  document.getElementById('fTanggalMasuk').value = today;
+  document.getElementById('fTanggalSelesai').value = d2.toISOString().split('T')[0];
+
+  const searchInput = document.getElementById('searchInput');
+  searchInput.setAttribute('autocomplete', 'off');
+
+  document.getElementById('fBerat').addEventListener('input', updateTotal);
+
+  renderOrders();
+  updateStats();
+}
+
+function pilihPaket(btn) {
+  document.querySelectorAll('.paket-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedPaket = { paket: btn.dataset.paket, harga: parseInt(btn.dataset.harga) };
+  updateTotal();
+}
+
+function updateTotal() {
+  const berat = parseFloat(document.getElementById('fBerat').value) || 0;
+  const total = berat * selectedPaket.harga;
+  document.getElementById('totalPreview').textContent = 'Rp ' + total.toLocaleString('id-ID');
+}
+
+function tambahOrder() {
+  const nama = document.getElementById('fNama').value.trim();
+  const hp = document.getElementById('fHp').value.trim();
+  const berat = parseFloat(document.getElementById('fBerat').value);
+  const tanggalMasuk = document.getElementById('fTanggalMasuk').value;
+  const tanggalSelesai = document.getElementById('fTanggalSelesai').value;
+  const catatan = document.getElementById('fCatatan').value.trim();
+
+  if (!nama) return showToast('⚠️ Nama pelanggan harus diisi!');
+  if (!berat || berat <= 0) return showToast('⚠️ Berat harus diisi!');
+
+  const total = berat * selectedPaket.harga;
+  const id = 'LDR-' + String(orders.length + 1).padStart(4, '0');
+
+  const order = { id, nama, hp, berat, paket: selectedPaket.paket, harga: selectedPaket.harga, total, tanggalMasuk, tanggalSelesai, catatan, status: 'proses', createdAt: new Date().toISOString() };
+
+  orders.unshift(order);
+  save();
+  resetForm();
+  renderOrders();
+  updateStats();
+  showToast('✅ Order berhasil ditambahkan!');
+}
+
+function resetForm() {
+  document.getElementById('fNama').value = '';
+  document.getElementById('fHp').value = '';
+  document.getElementById('fBerat').value = '';
+  document.getElementById('fCatatan').value = '';
+  document.getElementById('totalPreview').textContent = 'Rp 0';
+}
+
+function nextStatus(s) {
+  if (s === 'proses') return 'selesai';
+  if (s === 'selesai') return 'diambil';
+  return 'proses';
+}
+
+function ubahStatus(id) {
+  const order = orders.find(o => o.id === id);
+  if (!order) return;
+  order.status = nextStatus(order.status);
+  save();
+  renderOrders();
+  updateStats();
+  const label = order.status === 'selesai' ? '✅ Selesai' : order.status === 'diambil' ? '📦 Diambil' : '🔄 Proses';
+  showToast(`Status diupdate: ${label}`);
+}
+
+function hapusOrder(id) {
+  if (!confirm('Hapus order ini?')) return;
+  orders = orders.filter(o => o.id !== id);
+  save();
+  renderOrders();
+  updateStats();
+  showToast('🗑️ Order dihapus.');
+}
+
+function setFilter(status, el) {
+  filterStatus = status;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderOrders();
+}
+
+function renderOrders() {
+  const search = document.getElementById('searchInput').value.toLowerCase().trim();
+  let filtered = orders.filter(o => {
+    const target = `${o.nama} ${o.id} ${o.hp || ''} ${o.paket} ${o.status}`.toLowerCase();
+    return target.includes(search) && (filterStatus === 'semua' || o.status === filterStatus);
+  });
+  filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  const container = document.getElementById('ordersList');
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">🫧</div><h3>Tidak ditemukan</h3><p>Coba kata kunci lain</p></div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(o => {
+    const statusLabel = o.status === 'proses' ? '🔄 Proses' : o.status === 'selesai' ? '✅ Selesai' : '📦 Diambil';
+    const tgl = new Date(o.tanggalMasuk).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+    const tglSelesai = new Date(o.tanggalSelesai).toLocaleDateString('id-ID', { day:'numeric', month:'short' });
+    const riwayat = getCustomerHistory(o.nama);
+
+    return `
+    <div class="order-card status-${o.status}">
+      <div style="flex:1;min-width:0;">
+        <div class="order-top"><span class="order-num">${o.id}</span></div>
+        <div class="order-name">${o.nama}</div>
+        <div class="order-meta">
+          <span class="meta-pill paket">🧺 ${o.paket}</span>
+          <span class="meta-pill">⚖️ ${o.berat} kg</span>
+          ${o.hp ? `<span class="meta-pill">📱 ${o.hp}</span>` : ''}
+        </div>
+        <div class="order-date">Masuk: ${tgl} · Estimasi: ${tglSelesai}</div>
+        <div class="order-date" style="margin-top:2px;">🛍️ ${riwayat.totalOrder}x order · Total: Rp ${riwayat.totalBelanja.toLocaleString('id-ID')}</div>
+        <div class="order-date" style="margin-top:2px;">🕒 ${new Date(o.createdAt).toLocaleString('id-ID')}</div>
+        ${o.catatan ? `<div class="order-notes">"${o.catatan}"</div>` : ''}
+      </div>
+      <div class="order-right">
+        <div class="order-price">Rp ${o.total.toLocaleString('id-ID')}</div>
+        <span class="status-badge ${o.status}" onclick="ubahStatus('${o.id}')" title="Klik untuk ubah status">${statusLabel}</span>
+        <button class="delete-btn" onclick="hapusOrder('${o.id}')" title="Hapus order">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = orders.length;
+  document.getElementById('statProses').textContent = orders.filter(o => o.status === 'proses').length;
+  document.getElementById('statSelesai').textContent = orders.filter(o => o.status === 'selesai').length;
+  const pendapatan = orders.filter(o => o.status === 'diambil').reduce((s, o) => s + o.total, 0);
+  document.getElementById('statPendapatan').textContent = (pendapatan / 1000).toLocaleString('id-ID') + 'K';
+}
+
+function save() {
+  localStorage.setItem('laundry_orders', JSON.stringify(orders));
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
+}
+
+init();
+</script>
+</body>
+</html>
